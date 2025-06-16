@@ -7,6 +7,7 @@ cap = cv.VideoCapture(0)
 cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv.CAP_PROP_BUFFERSIZE, 1)  # Reduz o atraso
+cap.set(cv.CAP_PROP_FPS, 40)
 
 if not cap.isOpened():
     print("❌ Erro: Não foi possível acessar a webcam.")

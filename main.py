@@ -15,10 +15,11 @@ def main():
     # Start video capture from the default camera
     cap = cv.VideoCapture(0, cv.CAP_V4L2)
     
-    # ✅ Configurações da câmera
-    cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)  # 640
-    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)  # 480
-    cap.set(cv.CAP_PROP_BUFFERSIZE, 1)  # Reduz o atraso
+    # Camera settings
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv.CAP_PROP_BUFFERSIZE, 1)  # Reduces delay
+    cap.set(cv.CAP_PROP_FPS, 40)
     
     if not cap.isOpened():
         print("❌ Camera not available.")
@@ -30,9 +31,9 @@ def main():
     try:
         arduino = serial.Serial('/dev/serial0', 115200, timeout=1)
         time.sleep(2)  # Give time for Arduino to reboot
-        print("🔌 Serial connection established.")
+        print("\n🔌 Serial connection established.")
     except Exception as e:
-        print(f"⚠️ Unable to open serial port: {e}")
+        print(f"\n⚠️ Unable to open serial port: {e}")
         arduino = None
 
     cv.namedWindow("ArUco Detection", cv.WINDOW_NORMAL)
