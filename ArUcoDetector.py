@@ -3,18 +3,33 @@ import numpy as np
 import math
 
 # === Camera calibration matrix (intrinsics) ===
-# This matrix is obtained through camera calibration and defines focal length and principal point
-camera_matrix = np.array([
-    [897.47499574, 0.0, 324.82951238],
-    [0.0, 897.13216739, 241.34067822],
-    [0.0, 0.0, 1.0]
-])
+# This matrix is obtained through camera calibration and defines focal length and principal point parameters
+try:
+    camera_matrix = np.array([
+        [897.47499574, 0.0, 324.82951238],
+        [0.0, 897.13216739, 241.34067822],
+        [0.0, 0.0, 1.0]
+    ])
+    
+    dist_coeffs = np.array([1.28032231e-01, -1.50656891e+00, -1.56114801e-02, 2.23699925e-03, 6.89414705e+00])
+    
+# try:
+#     camera_matrix = np.array([
+#         [912.85582026, 0.0, 369.57386882],
+#         [0.0, 911.704299, 303.69738201],
+#         [0.0, 0.0, 1.0]
+#     ])
+    
+#     dist_coeffs = np.array([0.01886467, -0.59032158, -0.0017988, 0.00805257, 0.97352338])
+    
+    print("Camera matrix loaded successfully!")
+    print(camera_matrix)
+    print("\nDistortion coefficients loaded successfully!")
+    print(dist_coeffs)
 
-# === Distortion coefficients ===
-# These values correct radial and tangential lens distortion
-dist_coeffs = np.array([
-    0.128032231, -1.50656891, -0.0156114801, 0.00223699925, 6.89414705
-])
+except Exception as e:
+    print("Error loading camera parameters:", e)
+    exit(1)
 
 # === Helper function: Checks if a matrix is a valid rotation matrix ===
 def isRotationMatrix(R):

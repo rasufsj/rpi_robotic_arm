@@ -4,8 +4,8 @@ import cv2 as cv
 cap = cv.VideoCapture(0)
 
 # ✅ Configurações da câmera
-cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
-cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv.CAP_PROP_BUFFERSIZE, 1)  # Reduz o atraso
 
 if not cap.isOpened():

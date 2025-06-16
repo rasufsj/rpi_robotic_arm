@@ -14,6 +14,12 @@ id_to_cube_info = {
 def main():
     # Start video capture from the default camera
     cap = cv.VideoCapture(0, cv.CAP_V4L2)
+    
+    # ✅ Configurações da câmera
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)  # 640
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)  # 480
+    cap.set(cv.CAP_PROP_BUFFERSIZE, 1)  # Reduz o atraso
+    
     if not cap.isOpened():
         print("❌ Camera not available.")
         return
@@ -30,7 +36,7 @@ def main():
         arduino = None
 
     cv.namedWindow("ArUco Detection", cv.WINDOW_NORMAL)
-    last_print_time = time.time()
+    last_print_time = time.time()  # Time control for printing
     print_interval = 5  # seconds
 
     while True:
