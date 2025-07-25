@@ -1,8 +1,8 @@
 # 🤖 ArUco Cube Detection & Robotic Arm Control
 
-This project uses computer vision on a **Raspberry Pi 4** with a connected **Intel RealSense (or USB) camera** to detect cubes marked with **ArUco codes**. Each cube has a destination shelf assigned based on its marker ID.
+This project uses computer vision on a **Raspberry Pi 4** with a connected **Logitech C270 Webcam** to detect cubes marked with **ArUco codes**. Each cube has a destination shelf assigned based on its marker ID.
 
-Once detected, the Raspberry Pi calculates the 3D position and sends a serial command via **UART GPIO** to an **Arduino Nano**, which controls a **cartesian robotic arm** to move the cube.
+Once detected, the Raspberry Pi calculates the 3D position and sends a serial command via **UART USB** to an **Arduino Nano**, which controls a **cartesian robotic arm** to move the cube.
 
 ---
 
@@ -11,7 +11,7 @@ Once detected, the Raspberry Pi calculates the 3D position and sends a serial co
 - Detect ArUco markers using OpenCV
 - Estimate 3D position and orientation of each cube
 - Assign a shelf destination based on marker ID
-- Send commands to Arduino Nano via serial (UART GPIO)
+- Send commands to Arduino Nano via UART (USB)
 - Execute pick-and-place using a robotic arm
 
 ---
@@ -20,8 +20,10 @@ Once detected, the Raspberry Pi calculates the 3D position and sends a serial co
 
 ```
 project/
-├── ArUcoDetector.py     # Vision and pose estimation with Kalman filtering
-├── main.py              # Main application loop (camera + serial communication)
+├── ArUcoDetector.py       # Vision and pose estimation with Kalman filtering
+├── main.py                # Main application loop (camera + serial communication)
+├── sketch_codigo_projeto  # Complete Arduino Nano Code
+├── calib/                 # Camera calibration files
 └── README.md
 ```
 
@@ -60,7 +62,7 @@ pip install opencv-python numpy
 
 ## 🔁 Communication Protocol
 
-- Serial baudrate: `115200`
+- Interface: UART over USB (e.g., `/dev/ttyUSB0` on Linux or `COM3` on Windows)
 - Message format:
   ```
   PICK_<marker_id>_TO_<shelf_letter>
@@ -87,55 +89,8 @@ PICK_3_TO_C  →  Pick cube 3 and place it on Shelf C
 
 ## 🔧 Arduino Nano
 
-- Connect via UART (GPIO14 TX, GPIO15 RX) with voltage divider on RX
+- Connect via UART (USB) with voltage converter
 - Listens for `PICK_<id>_TO_<shelf>` and executes pick-and-place motion
-
-### Example Arduino Code
-
-```cpp
-String command = "";
-
-void setup() {
-  Serial.begin(115200);
-  Serial.println("🔧 Arduino Nano ready.");
-}
-
-void loop() {
-  if (Serial.available()) {
-    command = Serial.readStringUntil('\n');
-    command.trim();
-
-    if (command.startsWith("PICK_")) {
-      handlePickCommand(command);
-    }
-  }
-}
-
-void handlePickCommand(String cmd) {
-  int id_start = 5;
-  int id_end = cmd.indexOf("_TO_");
-  if (id_end == -1) return;
-
-  String id_str = cmd.substring(id_start, id_end);
-  String dest_str = cmd.substring(id_end + 4);
-
-  int cube_id = id_str.toInt();
-  char shelf = dest_str.charAt(0);
-
-  Serial.print("🎯 Command received → Cube ");
-  Serial.print(cube_id);
-  Serial.print(" → Shelf ");
-  Serial.println(shelf);
-
-  pickAndPlace(cube_id, shelf);
-}
-
-void pickAndPlace(int cubeID, char shelf) {
-  Serial.println("🔄 Executing pick and place sequence...");
-  delay(500);
-  Serial.println("✅ Action complete.");
-}
-```
 
 ---
 
