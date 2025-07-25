@@ -93,15 +93,3 @@ PICK_3_TO_C  →  Pick cube 3 and place it on Shelf C
 - Listens for `PICK_<id>_TO_<shelf>` and executes pick-and-place motion
 
 ---
-
-## 🗄️ Screenshots
-
-> *You can add a screenshot here from the camera window detecting markers and drawing axes*
-
----
-
-## 📌 Notes
-
-- You can expand this to support multiple markers per cube (e.g. take average position)
-- Add YOLO detection for classifying objects if needed in the future
-- The code is modular and ready for integration with a physical robotic arm
